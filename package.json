@@ -1,0 +1,27 @@
+{
+  "name": "apphttpserver",
+  "version": "1.0.0",
+  "description": "http server delivey app",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": " node index.js",
+    "test": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/didi9762/appHttpServer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/didi9762/appHttpServer/issues"
+  },
+  "homepage": "https://github.com/didi9762/appHttpServer#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
