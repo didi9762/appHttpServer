@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/client',ClientRouter)
 
-app.get('/',(req,res)=>{
+app.get('/aa',(req,res)=>{
   res.send('ok')
 })
 
