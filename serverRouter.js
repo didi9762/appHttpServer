@@ -1,5 +1,5 @@
 import express from "express";
-import openMissions from "./openMissions";
+import openMissions from "./openMissions.js";
 
 const ServerRouter = express.Router();
 
