@@ -12,7 +12,7 @@ ClientRouter.post("/login", async (req, res) => {
   try {
     const userD = await Users.findOne({userName:userName,password:password})
     if(!userD){console.log('error try fined user');res.status(403).send('user not found');return}
-    const token = generateToken(userD._id);
+    const token = generateToken(userD.userName);
     const userDetailes = {
       fitstName: userD.firstName,
       lastName: userD.lastName,
