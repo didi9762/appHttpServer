@@ -4,15 +4,14 @@ import UsersSend from "./usersSendSchema.js";
 import openMissions from "./openMissions.js";
 import { generateToken, verifyToken } from "./verify.js";
 
+
 const ClientRouter = express.Router();
 
 ClientRouter.post("/login", async (req, res) => {
   const { userName, password } = req.body;
   try {
-    const userD = await Users.findOne({
-      userName: userName,
-      password: password,
-    });
+    const userD = await Users.findOne({userName:userName,password:password})
+    if(!userD){console.log('error try fined user');res.status(403).send('user not found');return}
     const token = generateToken(userD._id);
     const userDetailes = {
       fitstName: userD.firstName,
