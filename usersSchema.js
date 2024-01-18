@@ -7,6 +7,6 @@ userName:String,
 password:String,
 group:Array,
 })
-const Users = mongoose.model('usersGet',usersGetsSchema)
+const Users = mongoose.model('usersgets',usersGetsSchema)
 
 export default Users

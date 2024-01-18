@@ -10,6 +10,6 @@ group:Array,
 phone:String,
 partners:Number
 })
-const UsersSend = mongoose.model('usersSned',usersGetsSchema)
+const UsersSend = mongoose.model('userssends',usersGetsSchema)
 
 export default UsersSend
