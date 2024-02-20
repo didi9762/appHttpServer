@@ -8,7 +8,10 @@ password:String,
 address:String,
 group:Array,
 phone:String,
-partners:Number
+partners:Number,
+requests:Array,
+tasksInProgress:[{type:Object}],
+tasksHistory:[{type:Object}]
 })
 const UsersSend = mongoose.model('userssends',usersGetsSchema)
 
