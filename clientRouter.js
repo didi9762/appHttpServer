@@ -36,7 +36,7 @@ ClientRouter.post("/login", async (req, res) => {
 });
 
 ClientRouter.get('/getupdates',async (req,res)=>{
-  try{if(!verifyToken(req,async (userName)=>{
+  try{if(!await verifyToken(req,async (userName)=>{
     const user = await Users.findOne({userName:userName})
     if(user){
       const userDetailes = {
@@ -188,10 +188,10 @@ ClientRouter.get("/groupdetails", async (req, res) => {
   }
 });
 
-ClientRouter.get("/open", (req, res) => {
+ClientRouter.get("/open", async(req, res) => {
   try {
     if (
-      !verifyToken(req, async (userName) => {
+      !await verifyToken(req, async (userName) => {
         const user = await Users.findOne({ userName: userName });
         const missions = Array.from(openMissions.values());
         const missionsToSend = missions.filter((mission) => {
@@ -215,7 +215,7 @@ ClientRouter.get("/open", (req, res) => {
 ClientRouter.get('/taskshistory',async (req,res)=>{
   try {
     if (
-      !verifyToken(req,async (userName) => {
+      !await verifyToken(req,async (userName) => {
         const user = await Users.findOne({userName:userName})
         const tasksIdList = user.tasksHistory
         async function findTasks() {
@@ -238,7 +238,7 @@ ClientRouter.get('/taskshistory',async (req,res)=>{
 ClientRouter.delete('/deletetaskhistory',async (req,res)=>{
   const {taskid} = req.headers 
   try{
-    if(!verifyToken(req,async(userame)=>{
+    if(!await verifyToken(req,async(userame)=>{
       const user = await Users.findOne({userName:userame})
       const newHistoryList = user.tasksHistory.filter((id)=>id!==taskid)
       await user.updateOne({
@@ -250,10 +250,10 @@ tasksHistory:newHistoryList
 }
 })
 
-ClientRouter.get("/close", (req, res) => {
+ClientRouter.get("/close", async(req, res) => {
   try {
     if (
-      !verifyToken(req, async(userName) => {
+      !await verifyToken(req, async(userName) => {
         const user =await Users.findOne({userName:userName})
         const idsList = user.tasksInProgress
         

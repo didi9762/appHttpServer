@@ -39,15 +39,16 @@ SenderRouter.post("/login", async (req, res) => {
     }
   });
   
-  SenderRouter.get('/updateuserinfo',(req,res)=>{
+  SenderRouter.get('/updateuserinfo',async(req,res)=>{
     try{
-    if(!verifyToken(req,async(userName)=>{
+
+    if(!await verifyToken(req,async(userName)=>{
         const user = await UsersSend.findOne({userName:userName})
         res.json({group: user.group,
             requests:user.requests,
             tasksInProgress:user.tasksInProgress,
             tasksOpen:user.tasksOpen})
-    })){res.status(503).send('error try update user info: invalid token')}
+    })){ res.status(503).send('error try update user info: invalid token')}
     }catch(e){console.log('error try update user info:',e);}
   })
 
@@ -84,6 +85,7 @@ SenderRouter.get('/tasksinprogress', async (req, res) => {
 
 SenderRouter.get('/taskoverview',async(req,res)=>{
     const {taskid,username} = req.headers
+    console.log(taskid,username);
     try{
         const task = await Tasks.findOne({id:taskid,sender:username})
         if(!task){res.status(503).send("task does not exist" );return}
