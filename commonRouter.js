@@ -10,7 +10,7 @@ CommonRouter.get('/taskshistory',async (req,res)=>{
     try {
         const {issender} = req.headers
       if (
-        !verifyToken(req,async (userName) => {
+        !await verifyToken(req,async (userName) => {
           const user =issender==='true'?await UsersSend.findOne({userName:userName}): await Users.findOne({userName:userName})
           if(!user){
             res.status(503).send('error user not found');return}
@@ -35,7 +35,7 @@ CommonRouter.get('/taskshistory',async (req,res)=>{
   CommonRouter.delete('/deletetaskhistory',async (req,res)=>{
     const {taskid,issender} = req.headers 
     try{
-      if(!verifyToken(req,async(userName)=>{
+      if(!await verifyToken(req,async(userName)=>{
         const user =issender==='true'?await UsersSend.findOne({userName:userName}): await Users.findOne({userName:userName})
         const newHistoryList = user.tasksHistory.filter((id)=>id!==taskid)
         await user.updateOne({

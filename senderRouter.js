@@ -39,22 +39,23 @@ SenderRouter.post("/login", async (req, res) => {
     }
   });
   
-  SenderRouter.get('/updateuserinfo',(req,res)=>{
+  SenderRouter.get('/updateuserinfo',async(req,res)=>{
     try{
-    if(!verifyToken(req,async(userName)=>{
+
+    if(!await verifyToken(req,async(userName)=>{
         const user = await UsersSend.findOne({userName:userName})
         res.json({group: user.group,
             requests:user.requests,
             tasksInProgress:user.tasksInProgress,
             tasksOpen:user.tasksOpen})
-    })){res.status(503).send('error try update user info: invalid token')}
+    })){ res.status(503).send('error try update user info: invalid token')}
     }catch(e){console.log('error try update user info:',e);}
   })
 
-SenderRouter.get('/opentasks',(req,res)=>{
+SenderRouter.get('/opentasks',async(req,res)=>{
     try{
         let resList =[]
-    if(!verifyToken(req,(userName)=>{
+    if(!await verifyToken(req,(userName)=>{
         openMissions.forEach((task)=>{if(task.sender===userName){
             resList.push(task)
         }})
@@ -65,7 +66,7 @@ SenderRouter.get('/opentasks',(req,res)=>{
 
 SenderRouter.get('/tasksinprogress', async (req, res) => {
     try {
-        if (!verifyToken(req, async (userName) => {
+        if (!await verifyToken(req, async (userName) => {
             const sender = await UsersSend.findOne({ userName: userName });
             const resList = await Promise.all(sender.tasksInProgress.map(async (taskId) => {
                 const task = await Tasks.findOne({ id: taskId });
