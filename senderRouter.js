@@ -12,7 +12,6 @@ SenderRouter.post("/login", async (req, res) => {
     try {
       const userD = await UsersSend.findOne({
         userName: userName,
-        password: password,
       });
       if (!userD) {
         console.log("error try fined user");
@@ -20,8 +19,6 @@ SenderRouter.post("/login", async (req, res) => {
         return;
       }
       else if(userD.password!==password){console.log('password incorect');res.status(403).send({error:'incorrect password'});return}
-     
-      
       const token = generateToken(userD.userName);
       const userDetailes = {
         phone:userD.phone,
@@ -41,14 +38,19 @@ SenderRouter.post("/login", async (req, res) => {
   
   SenderRouter.get('/updateuserinfo',async(req,res)=>{
     try{
-
-    if(!await verifyToken(req,async(userName)=>{
+const isvalid = await verifyToken(req,async(userName)=>{
         const user = await UsersSend.findOne({userName:userName})
-        res.json({group: user.group,
+        res.json({
+            phone:user.phone,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            userName: user.userName,
+            group: user.group,
             requests:user.requests,
             tasksInProgress:user.tasksInProgress,
-            tasksOpen:user.tasksOpen})
-    })){ res.status(503).send('error try update user info: invalid token')}
+            tasksOpen:user.tasksOpen});return true
+        })
+        if(!isvalid){ res.status(503).send('error try update user info: invalid token');return}
     }catch(e){console.log('error try update user info:',e);}
   })
 
@@ -85,6 +87,7 @@ SenderRouter.get('/tasksinprogress', async (req, res) => {
 
 SenderRouter.get('/taskoverview',async(req,res)=>{
     const {taskid,username} = req.headers
+    console.log(taskid,username);
     try{
         const task = await Tasks.findOne({id:taskid,sender:username})
         if(!task){res.status(503).send("task does not exist" );return}
