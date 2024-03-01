@@ -87,7 +87,6 @@ SenderRouter.get('/tasksinprogress', async (req, res) => {
 
 SenderRouter.get('/taskoverview',async(req,res)=>{
     const {taskid,username} = req.headers
-    console.log(taskid,username);
     try{
         const task = await Tasks.findOne({id:taskid,sender:username})
         if(!task){res.status(503).send("task does not exist" );return}
