@@ -52,10 +52,10 @@ SenderRouter.post("/login", async (req, res) => {
     }catch(e){console.log('error try update user info:',e);}
   })
 
-SenderRouter.get('/opentasks',(req,res)=>{
+SenderRouter.get('/opentasks',async(req,res)=>{
     try{
         let resList =[]
-    if(!verifyToken(req,(userName)=>{
+    if(!await verifyToken(req,(userName)=>{
         openMissions.forEach((task)=>{if(task.sender===userName){
             resList.push(task)
         }})
@@ -66,7 +66,7 @@ SenderRouter.get('/opentasks',(req,res)=>{
 
 SenderRouter.get('/tasksinprogress', async (req, res) => {
     try {
-        if (!verifyToken(req, async (userName) => {
+        if (!await verifyToken(req, async (userName) => {
             const sender = await UsersSend.findOne({ userName: userName });
             const resList = await Promise.all(sender.tasksInProgress.map(async (taskId) => {
                 const task = await Tasks.findOne({ id: taskId });
@@ -85,7 +85,6 @@ SenderRouter.get('/tasksinprogress', async (req, res) => {
 
 SenderRouter.get('/taskoverview',async(req,res)=>{
     const {taskid,username} = req.headers
-    console.log(taskid,username);
     try{
         const task = await Tasks.findOne({id:taskid,sender:username})
         if(!task){res.status(503).send("task does not exist" );return}
