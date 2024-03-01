@@ -48,7 +48,7 @@ ClientRouter.get('/getupdates',async (req,res)=>{
         requests:user.requests,
         tasksInProgress:user.tasksInProgress
       };
-      res.json(JSON.stringify(userDetailes))}
+      res.json(JSON.stringify(userDetailes));return true}
   else{res.status(500).send('error try update uer info')}})){res.status(503).send('error no token')}
   }catch(e){console.log('error try get updates:',e);}
 })
@@ -202,11 +202,11 @@ ClientRouter.get("/open", async(req, res) => {
             return mission;
           }
         });
-        res.send(missionsToSend);
+        res.send(missionsToSend);return true
       })
     ) {
       res.send("invalid user");
-    }
+    };
   } catch (e) {
     console.log("error try refresh:", e);
   }
@@ -225,7 +225,7 @@ ClientRouter.get('/taskshistory',async (req,res)=>{
           return Promise.all(promises);
       }
       const resList = await findTasks()
-        res.send(resList);
+        res.send(resList);return true
       })
     ) {
       res.send("invalid user");
@@ -244,7 +244,7 @@ ClientRouter.delete('/deletetaskhistory',async (req,res)=>{
       await user.updateOne({
 tasksHistory:newHistoryList
       })
-      res.status(200).send('deleted')
+      res.status(200).send('deleted');return true
     })){res.send('invalid user')}
   }catch(e){console.log('error try delete task from history:',e)
 }
@@ -264,7 +264,7 @@ ClientRouter.get("/close", async(req, res) => {
           return Promise.all(promises);
       }
         const list = await findTasks()
-        res.send(list);
+        res.send(list);return true
       })
     ) {
       res.send("invalid user");
