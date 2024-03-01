@@ -8,10 +8,13 @@ import url from 'url'
     const query = url.parse(req.url, true).query;
     token = query.token;}
   if (!token){console.log('token error no token');return false}
-  jwt.verify(token, process.env.TOKEN_KEY, (err, decoded) => {
-    if (err) {console.log('error token:',err);return false}
-    return next(decoded.userName);
-      });
+  try{
+      const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+      return next(decoded.userName);
+  } catch (err) {
+      console.log('Token verification error:', err.message);
+      return false;
+  }
 }
 
 const generateToken = (userName) => {
