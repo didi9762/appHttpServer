@@ -22,7 +22,7 @@ CommonRouter.get('/taskshistory',async (req,res)=>{
             return Promise.all(promises);
         }
         const resList = await findTasks()
-          res.send(resList);
+          res.send(resList);return true
         })
       ) {
         res.send("invalid user");
@@ -41,7 +41,7 @@ CommonRouter.get('/taskshistory',async (req,res)=>{
         await user.updateOne({
   tasksHistory:newHistoryList
         })
-        res.status(200).send('deleted')
+        res.status(200).send('deleted');return true
       })){res.send('invalid user')}
     }catch(e){console.log('error try delete task from history:',e)
   }

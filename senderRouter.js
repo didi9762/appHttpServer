@@ -61,7 +61,7 @@ SenderRouter.get('/opentasks',async(req,res)=>{
         openMissions.forEach((task)=>{if(task.sender===userName){
             resList.push(task)
         }})
-        res.send(resList)
+        res.send(resList);return true
     })){res.status(503).send('error no token')}
 }catch(e){console.log('error try get user open tasks: invalid token');}
 })
@@ -75,7 +75,7 @@ SenderRouter.get('/tasksinprogress', async (req, res) => {
   return task
             }));
             const filteredResList = resList.filter(task => task !== null);
-            res.send(filteredResList);
+            res.send(filteredResList);return true
         })) {
             res.status(503).send('error try get tasks in progress: invalid token');
         }
