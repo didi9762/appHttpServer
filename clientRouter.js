@@ -36,40 +36,23 @@ ClientRouter.post("/login", async (req, res) => {
 });
 
 ClientRouter.get('/getupdates',async (req,res)=>{
-  try{ await verifyToken(req,async (userName)=>{
+  try{if(!verifyToken(req,async (userName)=>{
     const user = await Users.findOne({userName:userName})
-    if(user){res.json(JSON.stringify(user))}
-  else{res.status(500).send('error try update uer info')}})
+    if(user){
+      const userDetailes = {
+        phone:user.phone,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        userName: user.userName,
+        group: user.group,
+        requests:user.requests,
+        tasksInProgress:user.tasksInProgress
+      };
+      res.json(JSON.stringify(userDetailes))}
+  else{res.status(500).send('error try update uer info')}})){res.status(503).send('error no token')}
   }catch(e){console.log('error try get updates:',e);}
 })
 
-ClientRouter.post("/loginsender", async (req, res) => {
-  const { userName, password } = req.body;
-  try {
-    const userD = await UsersSend.findOne({
-      userName: userName,
-      password: password,
-    });
-    if (!userD) {
-      console.log("error try fined user");
-      res.status(403).send("user not found");
-      return;
-    }
-    const token = generateToken(userD.userName);
-    const userDetailes = {
-      phone:userD.phone,
-      firstName: userD.firstName,
-      lastName: userD.lastName,
-      userName: userD.userName,
-      group: userD.group,
-      requests:userD.requests,
-      tasksInProgress:userD.tasksInProgress
-    };
-    res.json({ userDetailes: userDetailes, token: token });
-  } catch (e) {
-    console.log("error try login:", e);
-  }
-});
 
 ClientRouter.post('/joingroup',async(req,res)=>{//!!!!!!!add operation to resolve token!!!!!!
   const {userId,token} = req.body

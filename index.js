@@ -8,6 +8,8 @@ import Tasks from './tasksSchema.js';
 import Users from './usersSchema.js';
 import UsersSend from './usersSendSchema.js';
 import openMissions from './openMissions.js';
+import SenderRouter from './senderRouter.js';
+import CommonRouter from './commonRouter.js';
 
 
 
@@ -20,6 +22,8 @@ app.use(cors());
 app.use(express.json());
 app.use('/client',ClientRouter)
 app.use('/server',ServerRouter)
+app.use('/sender',SenderRouter)
+app.use('/common',CommonRouter)
 
 async function deleteTaks(){
   try{
