@@ -18,7 +18,7 @@ ClientRouter.post("/login", async (req, res) => {
       res.status(403).send({error:"user not found"});
       return;
     }
-    else if(userD.password!==password){console.log('password incorect');res.status(403).send({error:'incorrect password'});return}
+    else if(userD.password!==password){res.status(403).send({error:'incorrect password'});return}
     const token = generateToken(userD.userName);
     const userDetailes = {
       phone:userD.phone,

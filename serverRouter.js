@@ -74,7 +74,8 @@ ServerRouter.put('/reject',async(req,res)=>{
     } else {
       update.saved=false
       update.open=true
-      openMissions.set(missionId,update)
+      openMissions.set(missionId,update);
+      res.send('ok')
     }
   }catch(e){
     console.log('error try reject saving task:',e);

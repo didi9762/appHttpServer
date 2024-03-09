@@ -18,7 +18,7 @@ import url from 'url'
 }
 
 const generateToken = (userName) => {
-  const token = jwt.sign({ userName }, process.env.TOKEN_KEY, { expiresIn: '1h' });
+  const token = jwt.sign({ userName }, process.env.TOKEN_KEY, { expiresIn: '23h' });
   return token;
 };
 

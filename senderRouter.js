@@ -18,7 +18,7 @@ SenderRouter.post("/login", async (req, res) => {
         res.status(403).send({error:"user not found"});
         return;
       }
-      else if(userD.password!==password){console.log('password incorect');res.status(403).send({error:'incorrect password'});return}
+      else if(userD.password!==password){res.status(403).send({error:'incorrect password'});return}
       const token = generateToken(userD.userName);
       const userDetailes = {
         phone:userD.phone,
@@ -37,6 +37,7 @@ SenderRouter.post("/login", async (req, res) => {
   });
   
   SenderRouter.get('/updateuserinfo',async(req,res)=>{
+
     try{
 const isvalid = await verifyToken(req,async(userName)=>{
         const user = await UsersSend.findOne({userName:userName})
