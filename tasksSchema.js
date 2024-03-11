@@ -11,18 +11,29 @@ const tasksSchema = new mongoose.Schema({
     deliveryGuy:String,
     saved: Boolean,
     close: Boolean,
-    senderAddress: String,
-    address: String,
+    source: String,
+    destination : String,
     sender: String,
     price: Number,
     notes: String,
-    targetPhone: String,
+    receiverPhone: String,
     wehicleType: {
         type: String,
         enum: ['station', 'motor', 'car', ''],
         default: ''
-    }
+    },
+    pickUpTime:Number,
+    deliveryTime:{
+        type:String,
+        enum:['now','long']
+    },
+    weight:Number,
+    itemType:String,
+    paymentMethod:{ type: String, enum: ['cash', 'app'],default:'cash' },
+    senderName:String,
+    reciverName:String
 });
+
 
 const Tasks = mongoose.model('alltasks', tasksSchema);
 

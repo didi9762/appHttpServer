@@ -47,6 +47,7 @@ ServerRouter.put("/save", async (req, res) => {
       updateMission.saved = userName;
       openMissions.set(update.id, updateMission);
       res.send({ message: "hold-success", mission: updateMission });
+
     } else if (update.close) {
       res.send("unsucces-close");
     } else {
@@ -76,6 +77,7 @@ ServerRouter.put('/reject',async(req,res)=>{
       update.open=true
       openMissions.set(missionId,update);
       res.send('ok')
+
     }
   }catch(e){
     console.log('error try reject saving task:',e);
@@ -118,6 +120,7 @@ ServerRouter.put("/close", async (req, res) => {
       });
       openMissions.delete(update.id);
       res.send("succes-close");
+
     }
   } catch (error) {
     console.log("error try to hold mission");
