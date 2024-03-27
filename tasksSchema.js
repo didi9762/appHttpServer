@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 const tasksSchema = new mongoose.Schema({
-    id: String,
     type: {
         type: String,
         enum: ['privet', 'public'],
@@ -10,28 +9,29 @@ const tasksSchema = new mongoose.Schema({
     open: Boolean,
     deliveryGuy:String,
     saved: Boolean,
-    close: Boolean,
     source: String,
     destination : String,
     sender: String,
     price: Number,
     notes: String,
     receiverPhone: String,
-    wehicleType: {
+    vehicleType: {
         type: String,
         enum: ['station', 'motor', 'car', ''],
         default: ''
     },
-    pickUpTime:Number,
+    pickupTime:Number,
     deliveryTime:{
         type:String,
         enum:['now','long']
     },
     weight:Number,
+    deliveryGuy:String,
     itemType:String,
     paymentMethod:{ type: String, enum: ['cash', 'app'],default:'cash' },
     senderName:String,
-    reciverName:String
+    reciverName:String,
+    blockedUsers:Array
 });
 
 

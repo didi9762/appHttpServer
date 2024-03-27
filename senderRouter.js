@@ -74,7 +74,7 @@ SenderRouter.get('/tasksinprogress', async (req, res) => {
         if (!await verifyToken(req, async (userName) => {
             const sender = await UsersSend.findOne({ userName: userName });
             const resList = await Promise.all(sender.tasksInProgress.map(async (taskId) => {
-                const task = await Tasks.findOne({ id: taskId });
+                const task = await Tasks.findOne({ _id: taskId });
   return task
             }));
             const filteredResList = resList.filter(task => task !== null);
@@ -91,7 +91,7 @@ SenderRouter.get('/tasksinprogress', async (req, res) => {
 SenderRouter.get('/taskoverview',async(req,res)=>{
     const {taskid,username} = req.headers
     try{
-        const task = await Tasks.findOne({id:taskid,sender:username})
+        const task = await Tasks.findOne({_id:taskid,sender:username})
         if(!task){res.status(503).send("task does not exist" );return}
         setTimeout(async () => {
             try {

@@ -1,4 +1,3 @@
-import { log } from 'console';
 import jwt from 'jsonwebtoken';
 import url from 'url'
 

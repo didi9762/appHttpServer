@@ -1,50 +1,65 @@
 import Users from "./usersSchema.js";
 import UsersSend from "./usersSendSchema.js";
 import Tasks from "./tasksSchema.js";
-import { verifyToken,generateToken } from "./verify.js";
+import { verifyToken } from "./verify.js";
 import express from "express";
 
-const CommonRouter = express.Router()
+const CommonRouter = express.Router();
 
-CommonRouter.get('/taskshistory',async (req,res)=>{
-    try {
-        const {issender} = req.headers
-      if (
-        !await verifyToken(req,async (userName) => {
-          const user =issender==='true'?await UsersSend.findOne({userName:userName}): await Users.findOne({userName:userName})
-          if(!user){
-            res.status(503).send('error user not found');return}
-          const tasksIdList = user.tasksHistory
-          async function findTasks() {
-            const promises = tasksIdList.map(async (id) => {
-                return await Tasks.findOne({ id: id });
-            });
-            return Promise.all(promises);
+CommonRouter.get("/taskshistory", async (req, res) => {
+  try {
+    const { issender } = req.headers;
+    if (
+      !(await verifyToken(req, async (userName) => {
+        const user =
+          issender === "true"
+            ? await UsersSend.findOne({ userName: userName })
+            : await Users.findOne({ userName: userName });
+        if (!user) {
+          res.status(503).send("error user not found");
+          return;
         }
-        const resList = await findTasks()
-          res.send(resList);return true
-        })
-      ) {
-        res.send("invalid user");
-      }
-    } catch (e) {
-      console.log("error try get history tasks:", e);
+        const tasksIdList = user.tasksHistory;
+        async function findTasks() {
+          const promises = tasksIdList.map(async (id) => {
+            return await Tasks.findOne({ _id: id });
+          });
+          return Promise.all(promises);
+        }
+        const resList = await findTasks();
+        res.send(resList);
+        return true;
+      }))
+    ) {
+      res.send("invalid user");
     }
-  })
-  
-  CommonRouter.delete('/deletetaskhistory',async (req,res)=>{
-    const {taskid,issender} = req.headers 
-    try{
-      if(!await verifyToken(req,async(userName)=>{
-        const user =issender==='true'?await UsersSend.findOne({userName:userName}): await Users.findOne({userName:userName})
-        const newHistoryList = user.tasksHistory.filter((id)=>id!==taskid)
-        await user.updateOne({
-  tasksHistory:newHistoryList
-        })
-        res.status(200).send('deleted');return true
-      })){res.send('invalid user')}
-    }catch(e){console.log('error try delete task from history:',e)
+  } catch (e) {
+    console.log("error try get history tasks:", e);
   }
-  })
+});
 
-  export default CommonRouter
+CommonRouter.delete("/deletetaskhistory", async (req, res) => {
+  const { taskid, issender } = req.headers;
+  try {
+    if (
+      !(await verifyToken(req, async (userName) => {
+        const user =
+          issender === "true"
+            ? await UsersSend.findOne({ userName: userName })
+            : await Users.findOne({ userName: userName });
+        const newHistoryList = user.tasksHistory.filter((id) => id !== taskid);
+        await user.updateOne({
+          tasksHistory: newHistoryList,
+        });
+        res.status(200).send("deleted");
+        return true;
+      }))
+    ) {
+      res.send("invalid user");
+    }
+  } catch (e) {
+    console.log("error try delete task from history:", e);
+  }
+});
+
+export default CommonRouter;
