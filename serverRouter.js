@@ -28,7 +28,7 @@ ServerRouter.post("/newtask", async (req, res) => {
     }
     openMissions.set(newMission._id.toString(), shortTask)
     await addToSenderTasksList(newMission.sender, newMission._id);
-    res.status(200).send("posted");
+    res.status(200).send(newMission._id.toString());
   } catch (error) {
     console.log("error try add task to open missions:", error);
     res.status(500).send("error try add task to open missions");

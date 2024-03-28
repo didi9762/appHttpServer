@@ -69,6 +69,16 @@ SenderRouter.get('/opentasks',async(req,res)=>{
 }catch(e){console.log('error try get user open tasks: invalid token');}
 })
 
+SenderRouter.get('/openTasksList',async(req,res)=>{
+    try{
+        if(!await verifyToken(req,async(userName)=>{
+            const sender = await UsersSend.findOne({userName:userName})
+            res.send(sender.tasksOpen);
+            return true
+        })){console.log('error not verify');}
+    }catch(e){console.log('error try get open tasks:',e);}
+})
+
 SenderRouter.get('/tasksinprogress', async (req, res) => {
     try {
         if (!await verifyToken(req, async (userName) => {
@@ -89,23 +99,24 @@ SenderRouter.get('/tasksinprogress', async (req, res) => {
 });
 
 SenderRouter.get('/taskoverview',async(req,res)=>{
-    const {taskid,username} = req.headers
+    const {taskid,username,open} = req.headers
     try{
-        const task = await Tasks.findOne({_id:taskid,sender:username})
+        const task = open?
+        openMissions.get(taskid):
+        await Tasks.findOne({_id:taskid,sender:username})
         if(!task){res.status(503).send("task does not exist" );return}
-        setTimeout(async () => {
             try {
                 const response = {
                   destination:task.destination,
                     price: task.price,
-                    deliveryGuy: task.deliveryGuy
+                    deliveryGuy: task.deliveryGuy,
+                    saved:task.saved
                 };
                 res.json(JSON.stringify(response));
             } catch (error) {
                 console.log('Error while preparing response:', error);
                 res.status(500).send('Internal Server Error');
             }
-        }, 2000);
     }catch(e){
         console.log('error try get task overview info:',e);
     }
