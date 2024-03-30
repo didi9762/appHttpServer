@@ -80,6 +80,7 @@ SenderRouter.get('/openTasksList',async(req,res)=>{
 })
 
 SenderRouter.get('/tasksinprogress', async (req, res) => {
+    console.log('open tasks:',openMissions);
     try {
         if (!await verifyToken(req, async (userName) => {
             const sender = await UsersSend.findOne({ userName: userName });
