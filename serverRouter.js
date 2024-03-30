@@ -49,7 +49,7 @@ async function addToSenderTasksList(userName, taskId) {
 ServerRouter.put("/save", async (req, res) => {
   const { missionId, userName } = req.body;
   try {
-    const update = await openMissions.get(missionId.toString());
+    const update = await openMissions.get(missionId);
     if (!update) {
       console.log(`mission:${missionId} not found`);
       res.send("unsucces-close");
@@ -67,7 +67,7 @@ ServerRouter.put("/save", async (req, res) => {
       res.send("already-in-hold");
     }
   } catch (error) {
-    console.log("error try to hold mission");
+    console.log("error try to hold mission:",error);
   }
 });
 
@@ -140,7 +140,7 @@ ServerRouter.put("/close", async (req, res) => {
 
     }
   } catch (error) {
-    console.log("error try to hold mission");
+    console.log("error try close mission:",e);
   }
 });
 
